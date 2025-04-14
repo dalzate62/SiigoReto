@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '4.1.4-RC1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    serenityVersion = '4.2.0'
+    junitVersion = '4.13.2'
+    //mysqlConnectorVersion = '8.3.0'
+}
+
+dependencies {
+    // Serenity Core
+    implementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay-rest:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-junit:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-cucumber:${serenityVersion}"
+
+    // SLF4J Logger
+    implementation 'org.slf4j:slf4j-simple:2.0.12'
+
+    // Log4j Logger (opcional)
+    implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+    implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
+
+    // JUnit
+    testImplementation "junit:junit:${junitVersion}"
+
+    // MySQL Connector
+    //implementation "mysql:mysql-connector-java:${mysqlConnectorVersion}"
+}
+
+test.finalizedBy(aggregate)
+
+test {
+    useJUnit()
+    systemProperties = System.getProperties()
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(JavaExec) {
+    systemProperties = System.getProperties()
+}
+
+gradle.startParameter.continueOnFailure = true
